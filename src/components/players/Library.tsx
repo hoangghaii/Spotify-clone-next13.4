@@ -5,6 +5,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { TbPlaylist } from 'react-icons/tb';
 
 import MediaItem from '@/components/players/MediaItem';
+import { useAuthModal, useUploadModal, useUser } from '@/hooks';
 import { Song } from '@/types';
 
 type Props = {
@@ -12,7 +13,21 @@ type Props = {
 };
 
 const Library: FC<Props> = ({ songs }: Props) => {
-  const onClick = () => {};
+  const authModal = useAuthModal();
+
+  const uploadModal = useUploadModal();
+
+  const { user } = useUser();
+
+  const onClick = () => {
+    if (!user) {
+      return authModal.onOpen();
+    }
+
+    // TODO: Check for subscription
+
+    return uploadModal.onOpen();
+  };
 
   const onPlay = (id: string) => {};
 
