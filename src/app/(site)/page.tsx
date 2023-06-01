@@ -1,8 +1,15 @@
+import { getSongs } from '@/actions';
+import PageContent from '@/app/(site)/components/PageContent';
 import Header from '@/components/commons/Header';
 import ListItem from '@/components/commons/ListItem';
-import PageContent from '@/components/players/PageContent';
 
-export default function Home() {
+// If you want to revalidate data that does not use fetch (i.e. using an external package or query builder), you can use the route segment config.
+// https://nextjs.org/docs/app/building-your-application/data-fetching/revalidating
+export const revalidate = 0;
+
+export default async function Home() {
+  const songs = await getSongs();
+
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header>
@@ -21,7 +28,7 @@ export default function Home() {
         <div className="flex justify-between items-center">
           <h1 className="text-white text-2xl font-semibold">Newest songs</h1>
         </div>
-        <PageContent songs={[]} />
+        <PageContent songs={songs} />
       </div>
     </div>
   );

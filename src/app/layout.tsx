@@ -1,5 +1,7 @@
 import { Figtree } from 'next/font/google';
 
+import { getSongsByUserId } from '@/actions';
+import Player from '@/components/players/Player';
 import Sidebar from '@/components/sidebars/Sidebar';
 import ModalProvider from '@/providers/ModalProvider';
 import SupabaseProvider from '@/providers/SupabaseProvider';
@@ -15,11 +17,15 @@ export const metadata = {
   description: 'Spotify Clone',
 };
 
-export default function RootLayout({
+export const revalidate = 0;
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const userSongs = await getSongsByUserId();
+
   return (
     <html lang="en">
       <body className={font.className}>
@@ -27,7 +33,8 @@ export default function RootLayout({
         <SupabaseProvider>
           <UserProvider>
             <ModalProvider />
-            <Sidebar songs={[]}>{children}</Sidebar>
+            <Sidebar songs={userSongs}>{children}</Sidebar>
+            <Player />
           </UserProvider>
         </SupabaseProvider>
       </body>

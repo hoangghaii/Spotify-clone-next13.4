@@ -5,7 +5,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { TbPlaylist } from 'react-icons/tb';
 
 import MediaItem from '@/components/players/MediaItem';
-import { useAuthModal, useUploadModal, useUser } from '@/hooks';
+import { useAuthModal, useOnPlay, useUploadModal, useUser } from '@/hooks';
 import { Song } from '@/types';
 
 type Props = {
@@ -29,7 +29,7 @@ const Library: FC<Props> = ({ songs }: Props) => {
     return uploadModal.onOpen();
   };
 
-  const onPlay = (id: string) => {};
+  const onPlay = useOnPlay(songs);
 
   return (
     <div className="flex flex-col">

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { FC } from 'react';
 
+import { useLoadImage, usePlayer } from '@/hooks';
 import { Song } from '@/types';
 
 type Props = {
@@ -11,10 +12,16 @@ type Props = {
 };
 
 const MediaItem: FC<Props> = ({ data, onClick }: Props) => {
+  const player = usePlayer();
+
+  const imageUrl = useLoadImage(data);
+
   const handleClick = () => {
     if (onClick) {
-      onClick(data.id);
+      return onClick(data.id);
     }
+
+    return player.setId(data.id);
   };
 
   return (
@@ -25,7 +32,7 @@ const MediaItem: FC<Props> = ({ data, onClick }: Props) => {
       <div className="relative rounded-md min-h-[48px] min-w-[48px] overflow-hidden">
         <Image
           fill
-          src={'/images/music-placeholder.png'}
+          src={imageUrl || '/images/liked.png'}
           alt={'Music image'}
           className="object-cover"
         />
