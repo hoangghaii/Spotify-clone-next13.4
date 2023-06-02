@@ -5,7 +5,13 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { TbPlaylist } from 'react-icons/tb';
 
 import MediaItem from '@/components/players/MediaItem';
-import { useAuthModal, useOnPlay, useUploadModal, useUser } from '@/hooks';
+import {
+  useAuthModal,
+  useOnPlay,
+  useSubscribeModal,
+  useUploadModal,
+  useUser,
+} from '@/hooks';
 import { Song } from '@/types';
 
 type Props = {
@@ -13,23 +19,27 @@ type Props = {
 };
 
 const Library: FC<Props> = ({ songs }: Props) => {
+  const subscribeModal = useSubscribeModal();
+
   const authModal = useAuthModal();
 
   const uploadModal = useUploadModal();
 
-  const { user } = useUser();
+  const { user, subscription } = useUser();
+
+  const onPlay = useOnPlay(songs);
 
   const onClick = () => {
     if (!user) {
       return authModal.onOpen();
     }
 
-    // TODO: Check for subscription
+    if (!subscription) {
+      return subscribeModal.onOpen();
+    }
 
     return uploadModal.onOpen();
   };
-
-  const onPlay = useOnPlay(songs);
 
   return (
     <div className="flex flex-col">

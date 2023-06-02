@@ -26,7 +26,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const UserProvider: FC<Props> = (props: Props) => {
+const UserProvider: FC<Props> = ({ props, children }: Props) => {
   const {
     session,
     isLoading: isLoadingUser,
@@ -49,8 +49,8 @@ const UserProvider: FC<Props> = (props: Props) => {
     supabase
       .from('subscriptions')
       .select('*, prices(*, products(*))')
-      .in('status', ['trialing, active'])
-      .single();
+      .in('status', ['trialing', 'active'])
+      .maybeSingle();
 
   useEffect(() => {
     if (user && !isLoadingData && !userDetails && !subscription) {
@@ -69,6 +69,8 @@ const UserProvider: FC<Props> = (props: Props) => {
           if (subscriptionPromise.status === 'fulfilled') {
             setSubscription(subscriptionPromise.value.data as Subscription);
           }
+
+          setIsloadingData(false);
         }
       );
     } else if (!user && !isLoadingUser && !isLoadingData) {
@@ -87,7 +89,7 @@ const UserProvider: FC<Props> = (props: Props) => {
 
   return (
     <UserContext.Provider value={value} {...props}>
-      {props.children}
+      {children}
     </UserContext.Provider>
   );
 };

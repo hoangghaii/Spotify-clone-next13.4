@@ -11,7 +11,7 @@ import { RxCaretLeft, RxCaretRight } from 'react-icons/rx';
 import { twMerge } from 'tailwind-merge';
 
 import Button from '@/components/buttons/Button';
-import { useAuthModal, useUser } from '@/hooks';
+import { useAuthModal, usePlayer, useUser } from '@/hooks';
 
 type Props = {
   children: React.ReactNode;
@@ -27,10 +27,12 @@ const Header: FC<Props> = ({ children, className }: Props) => {
 
   const authModal = useAuthModal();
 
+  const player = usePlayer();
+
   const handleLogout = async () => {
     const { error } = await supabaseClient.auth.signOut();
 
-    //TODO: Reset any playing songs
+    player.reset();
 
     router.refresh();
 

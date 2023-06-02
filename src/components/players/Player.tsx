@@ -5,6 +5,7 @@ import { useGetSongById, useLoadSongUrl, usePlayer } from '@/hooks';
 
 const Player = () => {
   const player = usePlayer();
+
   const { song } = useGetSongById(player.activeId);
 
   const songUrl = useLoadSongUrl(song!);
