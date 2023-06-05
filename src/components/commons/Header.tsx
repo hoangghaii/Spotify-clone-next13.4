@@ -1,6 +1,7 @@
 'use client';
 
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FC } from 'react';
 import { toast } from 'react-hot-toast';
@@ -24,6 +25,8 @@ const Header: FC<Props> = ({ children, className }: Props) => {
   const supabaseClient = useSupabaseClient();
 
   const { user } = useUser();
+
+  console.log(user);
 
   const authModal = useAuthModal();
 
@@ -85,9 +88,22 @@ const Header: FC<Props> = ({ children, className }: Props) => {
               </Button>
               <Button
                 onClick={() => router.push('/account')}
-                className="bg-white"
+                className={twMerge(
+                  'bg-white',
+                  user.user_metadata.avatar_url &&
+                    'relative w-[42px] h-[42px] px-5 overflow-hidden'
+                )}
               >
-                <FaUserAlt />
+                {user.user_metadata.avatar_url ? (
+                  <Image
+                    className="object-cover"
+                    src={user.user_metadata.avatar_url}
+                    fill
+                    alt="user image"
+                  />
+                ) : (
+                  <FaUserAlt />
+                )}
               </Button>
             </div>
           ) : (
